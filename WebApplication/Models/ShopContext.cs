@@ -22,7 +22,7 @@ namespace WebApplication.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseNpgsql("Host=localhost;Database=Shop;Username=postgres;Password=12345678");
+                optionsBuilder.UseSqlServer("Server=localhost;Database=Shop;User ID=sa;Password=coronadoserver2018;Trusted_Connection=True;MultipleActiveResultSets=true");
             }
         }
 
@@ -32,20 +32,21 @@ namespace WebApplication.Models
 
             modelBuilder.Entity<Categories>(entity =>
             {
-                entity.ToTable("categories");
+                entity.HasIndex(e => e.Name)
+                    .HasName("UQ__Categori__72E12F1B01FEB200")
+                    .IsUnique();
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasColumnName("name")
-                    .HasMaxLength(25);
+                    .HasMaxLength(25)
+                    .IsUnicode(false);
             });
 
             modelBuilder.Entity<Products>(entity =>
             {
-                entity.ToTable("products");
-
                 entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.CategoryId).HasColumnName("category_id");
@@ -53,7 +54,8 @@ namespace WebApplication.Models
                 entity.Property(e => e.Name)
                     .IsRequired()
                     .HasColumnName("name")
-                    .HasMaxLength(40);
+                    .HasMaxLength(40)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.Quantity).HasColumnName("quantity");
 
@@ -61,7 +63,7 @@ namespace WebApplication.Models
                     .WithMany(p => p.Products)
                     .HasForeignKey(d => d.CategoryId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("products_category_id_fkey");
+                    .HasConstraintName("FK__Products__catego__3B75D760");
             });
         }
     }

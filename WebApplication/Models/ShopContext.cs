@@ -33,7 +33,7 @@ namespace WebApplication.Models
             modelBuilder.Entity<Categories>(entity =>
             {
                 entity.HasIndex(e => e.Name)
-                    .HasName("UQ__Categori__72E12F1B01FEB200")
+                    .HasDatabaseName("UQ__Categori__72E12F1B01FEB200")
                     .IsUnique();
 
                 entity.Property(e => e.Id).HasColumnName("id");
